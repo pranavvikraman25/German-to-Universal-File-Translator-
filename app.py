@@ -5,7 +5,7 @@ import time
 from docx import Document
 from deep_translator import GoogleTranslator
 import pdfplumber
-from docx2pdf import convert
+
 
 # ---------------- CONFIG ----------------
 st.set_page_config(
@@ -201,32 +201,25 @@ else:
 status.info("Generating translated PDF...")
 progress.progress(90)
 
-convert(translated_docx, translated_pdf)
 
 progress.progress(100)
 status.success("Translation completed successfully!")
 
 # ---------------- RESULTS ----------------
 st.divider()
-st.subheader("📥 Download Translated Files")
+st.subheader("📥 Download Translated File")
 
-col1, col2 = st.columns(2)
+with open(translated_docx, "rb") as f:
+    st.download_button(
+        "⬇ Download Translated Word (.docx)",
+        f,
+        file_name="translated.docx"
+    )
 
-with col1:
-    with open(translated_docx, "rb") as f:
-        st.download_button(
-            "⬇ Download Translated Word",
-            f,
-            file_name="translated.docx"
-        )
-
-with col2:
-    with open(translated_pdf, "rb") as f:
-        st.download_button(
-            "⬇ Download Translated PDF",
-            f,
-            file_name="translated.pdf"
-        )
+st.info(
+    "PDF export is disabled on cloud servers.\n"
+    "Download the Word file and convert it to PDF locally if required."
+)
 
 # ---------------- FOOTER ----------------
 st.divider()
