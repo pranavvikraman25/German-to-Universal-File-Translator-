@@ -83,6 +83,24 @@ translated_pdf = os.path.join(TEMP_DIR, "translated.pdf")
 
 with open(input_path, "wb") as f:
     f.write(uploaded_file.read())
+from deep_translator import GoogleTranslator
+
+sample_text = ""
+if file_ext == "docx":
+    from docx import Document
+    d = Document(input_path)
+    if d.paragraphs:
+        sample_text = d.paragraphs[0].text
+elif file_ext == "pdf":
+    import pdfplumber
+    with pdfplumber.open(input_path) as pdf:
+        if pdf.pages:
+            sample_text = pdf.pages[0].extract_text()
+
+if sample_text:
+    detector = GoogleTranslator(source="auto", target=target_lang)
+    detected_lang = detector.detect(sample_text)
+    st.info(f"Detected source language: {detected_lang}")
 
 # ---------------- FILE ANALYSIS ----------------
 st.divider()
