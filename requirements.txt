@@ -2,5 +2,4 @@ streamlit
 python-docx
 deep-translator
 pdfplumber
-docx2pdf
 langdetect
